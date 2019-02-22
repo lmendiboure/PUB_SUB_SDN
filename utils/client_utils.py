@@ -34,7 +34,7 @@ def print_menu():
 
 
 # enable a client to subscibe to a topic : menu + sub process
-def sub_menu(service_list, already_sub):
+def sub_menu(service_list, already_sub,ID):
 	print "Select a service in this list:"
 	available_services_display(service_list,already_sub)  # display list of existing services and get index of the last service 
 	sub_number = raw_input(">")
@@ -42,7 +42,7 @@ def sub_menu(service_list, already_sub):
 	if sub_number and int(sub_number) <= len(service_list):  # If in list of service, we retrieve data about this service and create a thread for this service
 		name=(service_list.keys())[int(sub_number)]
 		port=service_list[name]["port"]
-		add_sub(name,port)
+		add_sub(name,port,ID)
 		print "You just subscribed to: " + name
 		return name
 	else:
@@ -51,18 +51,18 @@ def sub_menu(service_list, already_sub):
 
 
 # Add a new thread corresponding to a socket (ie subscription to a service)
-def add_sub(name,port):
+def add_sub(name,port,ID):
 	global threadID, threads
-	thread1 = subscriber.subThread(threadID, name, port)	
+	thread1 = subscriber.subThread(threadID, name,port, ID)	
 	thread1.start()
 	threads.append(thread1)
 	threadID += 1
 
 # add all the elements of a list of services: create multiple threads at the same time
-def add_services_list(services_list):
+def add_services_list(services_list,ID):
 	print "By default, you subscribed to these services:"
 	for key in services_list:
-		add_sub(key,services_list[key]["port"])
+		add_sub(key,services_list[key]["port"],ID)
 		print key
 
 # Manage the process on unsubscription

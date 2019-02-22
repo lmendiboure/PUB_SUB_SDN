@@ -19,21 +19,20 @@ def main():
 	IP_addr="" # Client IP Address
 	ID="" # Client ID (correponds to the first argument of the client program and the hostname
 
-	# First, we add the default services 
-	client_utils.add_services_list(services.default_services)
-	for defaut_sub in services.default_services:
-		sub_topics.append(defaut_sub)
 	# Get client infos	
 	(IP_addr,ID) = client_utils.get_client_infos()	
 
-	#with open('data/clients/5data.json', 'w') as outfile:
-	#    json.dump([], outfile)
+	# First, we add the default services 
+	client_utils.add_services_list(services.default_services,ID)
+	for defaut_sub in services.default_services:
+		sub_topics.append(defaut_sub)
+
 
 	# Then, we launch the client interface
 	while True:
 		choice =client_utils.print_menu()
 		if choice == "1":
-			service_name = client_utils.sub_menu(services.services_list, sub_topics)
+			service_name = client_utils.sub_menu(services.services_list, sub_topics,ID)
 			if service_name:
 				sub_topics.append(service_name)
 
