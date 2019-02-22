@@ -1,5 +1,8 @@
 #!/usr/bin/python
-import socket, threading, errno
+import socket, threading, errno,time, sys
+sys.path.append('..')
+import config
+
 
 # Handle the different subscriptions corresponding to different ports, a thread is created for each subscription
 
@@ -26,6 +29,8 @@ def listen_socket(self,threadName, udp_port):
 	try:
 	        data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
         	print "\n%s, received message: %s" % (threadName,data)
+		data = int(data)
+		print int(round(time.time() * 1000000)) - data
 	except socket.error, e:
 		if e.args[0] == errno.EWOULDBLOCK:  # Non blocking socket
 			continue
@@ -34,4 +39,8 @@ def listen_socket(self,threadName, udp_port):
 			break
 
 
-
+def publish_message(IP,udp_port,message):
+	
+	sock = socket.socket(socket.AF_INET, # Internet
+                     socket.SOCK_DGRAM) # UDP
+	sock.sendto(message, (IP, udp_port))
